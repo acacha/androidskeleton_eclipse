@@ -25,6 +25,8 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks,FragmentType0.OnFragmentInteractionListener,FragmentType1.OnFragmentInteractionListener {
 
+	private static final String TAG = "AndroidSocialLoginTemplate MainActivity";
+
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -70,14 +72,15 @@ public class MainActivity extends ActionBarActivity implements
 		       fragment = (Fragment) new FragmentType1();
 		       break;
 		    case 2:
-		       //TODO
+		       //LOGOUT & REVOKE!
+		       logout(true);
 		       break;
 		    case 3:
-			       //LOGOUT
-		    	   logout();
-			       break;   
+		       //ONLY LOGOUT
+			   logout();
+			   break;   
 		    default:
-		       Log.w(this.getClass().getSimpleName(), "Reached Default in onNavigationDrawerItemSelected!");
+		       Log.w(TAG, "Reached Default in onNavigationDrawerItemSelected!");
 		       break;
 		 }
 		if (fragment != null)
@@ -93,13 +96,19 @@ public class MainActivity extends ActionBarActivity implements
 
 	}
 	
-	public void logout(){
-		Log.d(this.getClass().getSimpleName(), "Logout");
-		
+	private void logout(boolean revoke) {
+		Log.d(TAG, "Logout with one parameter");
 		Intent returnIntent = new Intent();
+		if(revoke == true) {
+			returnIntent.putExtra(AndroidSkeletonUtils.REVOKE_KEY, true);
+		}
 		setResult(RESULT_OK,returnIntent);
 		finish();
+	}
 
+	public void logout(){
+		Log.d(TAG, "Logout");
+		logout(false);
 	}
 
 	public void onSectionAttached(int number) {
@@ -111,8 +120,13 @@ public class MainActivity extends ActionBarActivity implements
 			mTitle = getString(R.string.title_section2);
 			break;
 		case 3:
+			//LOGOUT AND REVOKE: Not really necessary!
 			mTitle = getString(R.string.title_section3);
 			break;
+		case 4:
+			//LOGOUT: Not really necessary!
+			mTitle = getString(R.string.title_section3);
+			break;	
 		}
 	}
 

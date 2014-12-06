@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Ebre-escool</string>
+    <string name="app_name">AndroidSocialLoginTemplate</string>
     <string name="action_settings">Configuració</string>
-    <string name="hello_world">Hello world!</string>
 
     <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
@@ -22,17 +21,17 @@
     <string name="sign_in_with_google">Entreu amb Google+</string>
     <string name="sign_in_with_facebook">Entreu amb Facebook</string>
     <string name="sign_in_with_twitter">Entreu amb Twitter</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">AndroidSocialLoginTemplate</string>
     <string name="title_section1">Secció 1</string>
     <string name="title_section2">Secció 2</string>
-    <string name="title_section3">Secció 3</string>
+    <string name="title_section3">Revocar accés</string>
     <string name="title_section4">Sortir</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Obrir el calaix de navegació</string>
+    <string name="navigation_drawer_close">Tancar el calaix de navegació</string>
     <string name="action_example">Acció TODO</string>
     
-    <string name="hello_blank_fragment1">Secció 1</string>
-    <string name="hello_blank_fragment2">Secció 2</string>
+    <string name="hello_blank_fragment1">Fragment Secció 1</string>
+    <string name="hello_blank_fragment2">Fragment Secció 2</string>
     
     
 

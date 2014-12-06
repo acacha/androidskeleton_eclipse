@@ -142,7 +142,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
+		actionBar.setHomeButtonEnabled(false);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
@@ -273,7 +273,7 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 
 		if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
+			Toast.makeText(getActivity(), "Acció exemple TODO.", Toast.LENGTH_SHORT)
 					.show();
 			return true;
 		}
