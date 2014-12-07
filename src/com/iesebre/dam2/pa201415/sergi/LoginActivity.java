@@ -4,7 +4,6 @@ import java.io.InputStream;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -14,13 +13,14 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.iesebre.dam2.pa201415.sergi.R;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -29,7 +29,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity implements OnClickListener,ConnectionCallbacks,OnConnectionFailedListener {
+public class LoginActivity extends FragmentActivity implements 
+	OnClickListener,ConnectionCallbacks,OnConnectionFailedListener, LoginActivityFragment.OnFragmentInteractionListener {
 	
 	// Google client to interact with Google API
 	private GoogleApiClient mGoogleApiClient;
@@ -69,12 +70,11 @@ public class LoginActivity extends Activity implements OnClickListener,Connectio
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG,"onCreate!");
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login_activity);
-		
-		btnGoogleSignIn = (Button) findViewById(R.id.btn_google_sign_in);
-		
-		// Button click listeners
-		btnGoogleSignIn.setOnClickListener(this);
+		setContentView(R.layout.activity_login);
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.login_activitycontainer, new LoginActivityFragment()).commit();
+		}
 		
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 		.addConnectionCallbacks(this)
@@ -356,6 +356,12 @@ public class LoginActivity extends Activity implements OnClickListener,Connectio
 		protected void onPostExecute(Bitmap result) {
 			bmImage.setImageBitmap(result);
 		}
+	}
+
+	@Override
+	public void onFragmentInteraction(Uri uri) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -29,10 +29,10 @@
     <string name="navigation_drawer_open">Obrir el calaix de navegació</string>
     <string name="navigation_drawer_close">Tancar el calaix de navegació</string>
     <string name="action_example">Acció TODO</string>
-    
     <string name="hello_blank_fragment1">Fragment Secció 1</string>
     <string name="hello_blank_fragment2">Fragment Secció 2</string>
-    
-    
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main_activity_blank_fragment_esborrar">MainActivityBlankFragmentEsborrar</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
