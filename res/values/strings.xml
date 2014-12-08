@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">AndroidSocialLoginTemplate</string>
+    <string name="app_id">953279441368135</string>
     <string name="action_settings">Configuració</string>
 
     <style name="ButtonText">
@@ -34,5 +35,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main_activity_blank_fragment_esborrar">MainActivityBlankFragmentEsborrar</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="com_facebook_loginview_log_in_button">Entreu amb Facebook</string>
+    <string name="com_facebook_loginview_log_out_button">Sortiu de facebook</string>
 
 </resources>

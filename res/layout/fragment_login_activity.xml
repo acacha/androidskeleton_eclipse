@@ -32,8 +32,8 @@
     	    android:paddingTop="10dp"
     	    android:text="@string/sign_in_with_google" />
 
-        <Button
-            android:id="@+id/btnFb"
+        <com.facebook.widget.LoginButton
+            android:id="@+id/facebook_login_button"
             style="@style/ButtonText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,8 @@
             android:paddingLeft="30dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
-            android:text="@string/sign_in_with_facebook" />
+            android:text="@string/sign_in_with_facebook"
+            />
 
         <Button 
 	       	android:id="@+id/btnTwitter"

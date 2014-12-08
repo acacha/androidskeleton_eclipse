@@ -1,4 +1,4 @@
-package com.iesebre.dam2.pa201415.sergi;
+package com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -6,17 +6,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.facebook.widget.LoginButton;
+import com.iesebre.dam2.pa201415.sergi.R;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
- * must implement the {@link FragmentType1.OnFragmentInteractionListener}
- * interface to handle interaction events. Use the
- * {@link FragmentType1#newInstance} factory method to create an instance of
- * this fragment.
+ * must implement the
+ * {@link LoginActivityFragment.OnFragmentInteractionListener} interface to
+ * handle interaction events. Use the {@link LoginActivityFragment#newInstance}
+ * factory method to create an instance of this fragment.
  * 
  */
-public class FragmentType1 extends Fragment {
+public class LoginActivityFragment extends Fragment {
+	
+	private LoginButton loginButton;
+	
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -27,6 +35,8 @@ public class FragmentType1 extends Fragment {
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
+	
+	private Button btnGoogleSignIn;
 
 	/**
 	 * Use this factory method to create a new instance of this fragment using
@@ -36,11 +46,11 @@ public class FragmentType1 extends Fragment {
 	 *            Parameter 1.
 	 * @param param2
 	 *            Parameter 2.
-	 * @return A new instance of fragment FragmentType1.
+	 * @return A new instance of fragment LoginActivityFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
-	public static FragmentType1 newInstance(String param1, String param2) {
-		FragmentType1 fragment = new FragmentType1();
+	public static LoginActivityFragment newInstance(String param1, String param2) {
+		LoginActivityFragment fragment = new LoginActivityFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_PARAM1, param1);
 		args.putString(ARG_PARAM2, param2);
@@ -48,7 +58,7 @@ public class FragmentType1 extends Fragment {
 		return fragment;
 	}
 
-	public FragmentType1() {
+	public LoginActivityFragment() {
 		// Required empty public constructor
 	}
 
@@ -65,8 +75,18 @@ public class FragmentType1 extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_fragment_type1, container,
+		View view = inflater.inflate(R.layout.fragment_login_activity, container,
 				false);
+		
+		btnGoogleSignIn = (Button) view.findViewById(R.id.btn_google_sign_in);
+		
+		// Button click listeners
+		btnGoogleSignIn.setOnClickListener((OnClickListener) getActivity());
+		
+		loginButton = (LoginButton) view.findViewById(R.id.facebook_login_button);
+        loginButton.setReadPermissions("user_friends");
+		
+		return view;
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event

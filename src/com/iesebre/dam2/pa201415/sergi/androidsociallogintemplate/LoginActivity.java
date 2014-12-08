@@ -1,6 +1,14 @@
-package com.iesebre.dam2.pa201415.sergi;
+package com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate;
 
 import java.io.InputStream;
+
+import com.facebook.AppEventsLogger;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -16,11 +24,13 @@ import com.iesebre.dam2.pa201415.sergi.R;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -56,7 +66,18 @@ public class LoginActivity extends FragmentActivity implements
 	
 	private int socialLoginType=-1;
 	
-	/**
+	//FACEBOOK
+	private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+    
+    private boolean isResumed = false;
+    
+    /**
 	 * A flag indicating that a PendingIntent is in progress and prevents us
 	 * from starting further intents.
 	 */
@@ -65,6 +86,8 @@ public class LoginActivity extends FragmentActivity implements
 	private ConnectionResult mConnectionResult;
 	
 	private Button btnGoogleSignIn;
+
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +99,107 @@ public class LoginActivity extends FragmentActivity implements
 					.add(R.id.login_activitycontainer, new LoginActivityFragment()).commit();
 		}
 		
+		//GOOGLE
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 		.addConnectionCallbacks(this)
 		.addOnConnectionFailedListener(this).addApi(Plus.API)
 		.addScope(Plus.SCOPE_PLUS_LOGIN).build();
+		
+		//FACEBOOK
+		uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
 	}
+	
+	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+		Log.d(TAG,"onSessionStateChange!");
+        if (isResumed) {
+        	Log.d(TAG,"is resumed!");
+            FragmentManager manager = getSupportFragmentManager();
+            int backStackSize = manager.getBackStackEntryCount();
+            for (int i = 0; i < backStackSize; i++) {
+                manager.popBackStack();
+            }
+            // check for the OPENED state instead of session.isOpened() since for the
+            // OPENED_TOKEN_UPDATED state, the selection fragment should already be showing.
+            if (state.equals(SessionState.OPENED)) {
+            	Log.d(TAG,"onSessionStateChange: Logged to facebook");
+            	Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        		startActivityForResult(i, REQUEST_CODE_FACEBOOK_LOGIN);
+            } else if (state.isClosed()) {
+                //NO logged to facebook
+            	Log.d(TAG,"onSessionStateChange: Not logged to facebook");
+            }
+        }
+    }
+	
+	@Override
+    public void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+        isResumed = true;
+
+        // Call the 'activateApp' method to log an app event for use in analytics and advertising reporting.  Do so in
+        // the onResume methods of the primary Activities that an app may be launched into.
+        AppEventsLogger.activateApp(this);
+    }
+	
+	@Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+        isResumed = false;
+
+        // Call the 'deactivateApp' method to log an app event for use in analytics and advertising
+        // reporting.  Do so in the onPause methods of the primary Activities that an app may be launched into.
+        AppEventsLogger.deactivateApp(this);
+    }
+	
+	@Override
+    protected void onResumeFragments() {
+		Log.d(TAG,"onResumeFragments!");
+        super.onResumeFragments();
+        Session session = Session.getActiveSession();
+
+        if (session != null && session.isOpened()) {
+            // if the session is already open, try to show the selection fragment
+            
+        	//Login ok
+        	Log.d(TAG,"Login to facebook Ok!");
+        	Intent i = new Intent(LoginActivity.this, MainActivity.class);
+    		startActivityForResult(i, REQUEST_CODE_FACEBOOK_LOGIN);
+        	
+            //userSkippedLogin = false;
+        } /*else if (userSkippedLogin) {
+            showFragment(SELECTION, false);
+        }*/ else {
+            // otherwise present the splash screen and ask the user to login, unless the user explicitly skipped.
+        	//showFragment(SPLASH, false);
+        	Log.d(TAG,"Login to facebook not Ok!");
+        }
+    }
+	
+	@Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+	
+	@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+
+        //outState.putBoolean(USER_SKIPPED_LOGIN_KEY, userSkippedLogin);
+    }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int responseCode,
 			Intent intent) {
-		Log.d(TAG, "onActivityResult!");
+		Log.d(TAG, "onActivityResult. RequestCode: " + requestCode + " ResponseCode:" + responseCode + "!");
+		super.onActivityResult(requestCode, responseCode, intent);
+		
+		//Facebook:
+		uiHelper.onActivityResult(requestCode, responseCode, intent);
 		
 		switch (requestCode) {
 		case RC_SIGN_IN_GOOGLE:
@@ -121,6 +235,54 @@ public class LoginActivity extends FragmentActivity implements
 				}
 			}
 			break;
+		case REQUEST_CODE_FACEBOOK_LOGIN:
+			//LOGOUT from facebook
+			Log.d(TAG, "LOGOUT from facebook!");
+			if (responseCode == RESULT_OK) {
+				Log.d(TAG, "LOGOUT from facebook with response code RESULT_OK. Signing Out from facebook!...");
+				//Check if revoke exists!
+				Bundle extras = intent.getExtras();
+				boolean revoke = false;
+				if (extras != null) {
+					revoke = extras.getBoolean(AndroidSkeletonUtils.REVOKE_KEY);
+				}
+				
+				Session session = Session.getActiveSession();
+				
+				//TODO
+				/*
+				 
+				  if (session != null) {
+						Log.d("Logout","Pasa el if de session : "+session);
+				  if (session.isClosed()) {
+				  
+				 */
+				
+				if (revoke == true) {
+					Log.d(TAG, "LOGOUT and also revoke!...");
+					Log.d(TAG, "First revoke...");
+					progressDialog = ProgressDialog.show(
+				            LoginActivity.this, "", "Revocant permisos...", true);
+					new Request(
+							   session,
+							    "/me/permissions",
+							    null,
+							    HttpMethod.DELETE,
+							    new Request.Callback() {
+							        public void onCompleted(Response response) {
+							            /* handle the result */
+							        	Log.d(TAG, "Revoked. Response:" + response);
+							        	progressDialog.dismiss(); 
+							        }
+							    }
+							).executeAsync();
+					session.closeAndClearTokenInformation();
+				} else {
+					Log.d(TAG, "Only LOGOUT (no revoke)...");					
+					session.closeAndClearTokenInformation();
+				}
+			}
+		
 		default:
 			break;
 		}
