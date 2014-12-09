@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.facebook.widget.LoginButton;
-import com.iesebre.dam2.pa201415.sergi.R;
+import com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate.R;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -37,6 +37,8 @@ public class LoginActivityFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
 	
 	private Button btnGoogleSignIn;
+
+	private Button btnLoginTwitter;
 
 	/**
 	 * Use this factory method to create a new instance of this fragment using
@@ -85,6 +87,9 @@ public class LoginActivityFragment extends Fragment {
 		
 		loginButton = (LoginButton) view.findViewById(R.id.facebook_login_button);
         loginButton.setReadPermissions("user_friends");
+        
+        btnLoginTwitter = (Button) view.findViewById(R.id.btn_twitter_sign_in);
+		btnLoginTwitter.setOnClickListener((OnClickListener) getActivity());
 		
 		return view;
 	}

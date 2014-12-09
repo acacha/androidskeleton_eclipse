@@ -1,6 +1,6 @@
 package com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate;
 
-import com.iesebre.dam2.pa201415.sergi.R;
+import com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate.R;
 
 import android.app.Activity;
 import android.content.Intent;

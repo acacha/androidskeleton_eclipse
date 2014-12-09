@@ -47,7 +47,7 @@
             />
 
         <Button 
-	       	android:id="@+id/btnTwitter"
+	       	android:id="@+id/btn_twitter_sign_in"
 	       	android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:paddingTop="10dp"

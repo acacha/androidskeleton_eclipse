@@ -1,6 +1,6 @@
 package com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate;
 
-import com.iesebre.dam2.pa201415.sergi.R;
+import com.iesebre.dam2.pa201415.sergi.androidsociallogintemplate.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
